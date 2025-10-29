@@ -26,7 +26,7 @@ const server = http.createServer((req, res) => {
     console.log(myUrl);
 
     // Append the log message to a file named 'log3.txt'
-    fs.appendFile("./log3.txt", log, (err) => {
+    fs.appendFile("./log.txt", log, (err) => {
 
         // If there's an error writing to the file, return a 500 response
         if (err) {

@@ -6,7 +6,7 @@ const server = http.createServer((req, res) => {
 
     const log = `${Date.now()} : ${req.url} New Req received\n`;
 
-    fs.appendFile("./log2.txt", log, (err) => {
+    fs.appendFile("./log.txt", log, (err) => {
         if (err) {
             console.error("Error writing log:", err);
             res.statusCode = 500;
