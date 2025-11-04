@@ -3,6 +3,8 @@ REST API - JSON
 ------ Hybrid server -------
 GET /users - HTML document render 
 
+Dyanmic path parameters 
+Get /api/users/:id (this id can be valu , not fixed , id is a variable)
 GET /api/users/1 - Get the user with ID 1 
 Get /api/users/2 - Get the user with ID 2 
 
