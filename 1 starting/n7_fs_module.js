@@ -25,3 +25,12 @@ fs.appendFileSync("./n8_fs.js" , "Hellow");
 // fs.unlinkSync() -> delete a file 
 // fs.statSync() -> view the stats of a file 
 // fs.mkdirSync() 
+
+fs.readFile("./n8_fs.js" , "utf-8" , (err , res) =>{
+    if(err) {
+        console.log(err); 
+    }
+    else {
+        console.log(res); 
+    }
+});
