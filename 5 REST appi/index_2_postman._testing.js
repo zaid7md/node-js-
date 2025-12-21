@@ -1,6 +1,6 @@
 const express = require("express");
 const users = require("./MOCK_DATA.json");//from mockaro
-
+const fs = require("fs"); 
 const app = express();
 const port = 8000;
 
@@ -29,10 +29,26 @@ app.get("/api/users/:id", (req, res) => {
     return res.json(user);
 });
 
+//!using a plugin (extra functionaliy without affecting the main program)
+app.use(express.urlencoded({extended :false}));
+
 //--------------------------------------------------
 app.post("/api/users", (req, res) => {
-    return res.json({ status: "pending" });
+    const body = req.body ; 
+    console.log("Body : " , body);
+    users.push({...body , id :users.length+1}); 
+    //updating the data file and adding the form data to it 
+    fs.writeFile('./MOCK_DATA.json',JSON.stringify(users) ,(err , data) =>{
+        return res.json({ status: "pending" });
+    }); 
 });
+/*
+when using postman to use the post request 
+!it sends the data in the request body in the form : 
+first_name=Zaid&last_name=Mohammad&email=Zaid@gmail.com&gender=Male&job_title=Dev
+, the middleware converts it into a javascript object and attaches it to req.body 
+*/
+
 app.put("/api/users/:id", (req, res) => {
     //todo : create new users 
     return res.json({ status: "pending" });
