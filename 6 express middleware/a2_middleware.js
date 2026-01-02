@@ -1,10 +1,27 @@
 const express = require("express");
-const users = require("./MOCK_DATA.json");//from mockaro
+const users = require("./MOCK_DATA.json");
 const fs = require("fs");
 const app = express();
 const port = 8000;
 
 
+//Middlewares 
+//!--------------------------------------------------------
+app.use(express.urlencoded({ extended: false }));
+app.use((req , res , next) =>{
+    console.log("Hello from middleware 1"); 
+    req.myUserName = "zaid.dev";
+
+    fs.appendFile('./log1.txt', `\n${Date.now()} : ${req.ip} ${req.method} : ${req.path}` ,(err, data) =>{
+    next(); //if not written then request could not be sent to the server 
+    // or to the next middleware                
+    });
+});
+app.use((req , res , next) =>{
+    console.log("Hello from middleware 2" , req.myUserName);  
+    next(); 
+});
+//!--------------------------------------------------------
 
 app.get("/users", (req, res) => {
     const html = `
@@ -17,6 +34,7 @@ app.get("/users", (req, res) => {
 app.listen(port, () => console.log(`Server started at port : ${port}`));
 
 app.get("/api/users", (req, res) => {
+    console.log("In get route method");
     return res.json(users);
 });
 
@@ -27,7 +45,6 @@ app.get("/api/users/:id", (req, res) => {
     return res.json(user);
 });
 
-app.use(express.urlencoded({ extended: false }));
 
 app.post("/api/users", (req, res) => {
     const body = req.body;
@@ -37,13 +54,6 @@ app.post("/api/users", (req, res) => {
         return res.json({ status: "success", id: users.length });
     });
 });
-//JSON.stringify(users) used because files store text not JS objects
-//...body -> spread operator , it copies all key value pairs from the body object into a new object
-/*
-Avoids writing each field manually
-Keeps code clean and scalable
-Creates a new object (does not modify body)
-*/
 
 app.put("/api/users/:id", (req, res) => {
     const id = Number(req.params.id); 
@@ -52,7 +62,7 @@ app.put("/api/users/:id", (req, res) => {
     let obj ; 
     for(let i = 0 ; i < users.length ; i++){
         if(users[i].id === id){
-            users[i] = {id , ...body}; //full replacement
+            users[i] = {id , ...body}; 
             obj = users[i]; 
             found = true ; 
             break ;  
@@ -76,10 +86,9 @@ app.delete("/api/users/:id", (req, res) => {
     let found = false;
     for (let i = 0; i < users.length; i++) {
         if (users[i].id === id) {
-            users.splice(i, 1); //remove adding elements in array 
+            users.splice(i, 1); 
             found = true;
             break ; 
-            //array.splice(startIndex, deleteCount, item1, item2, ...)
         }
     }
 
