@@ -5,24 +5,19 @@ const app = express();
 const port = 8000;
 
 
-//Middlewares 
-//!--------------------------------------------------------
 app.use(express.urlencoded({ extended: false }));
 app.use((req , res , next) =>{
     console.log("Hello from middleware 1"); 
     req.myUserName = "zaid.dev";
 
     fs.appendFile('./log1.txt', `\n${Date.now()} : ${req.ip} ${req.method} : ${req.path}` ,(err, data) =>{
-    next(); //if not written then request could not be sent to the server 
-    // or to the next middleware                
+    next();  
     });
 });
 app.use((req , res , next) =>{
     console.log("Hello from middleware 2" , req.myUserName);  
-    // res.send("hello"); if this used , then req would be returned here only 
     next(); 
 });
-//!--------------------------------------------------------
 
 app.get("/users", (req, res) => {
     const html = `
@@ -35,10 +30,12 @@ app.get("/users", (req, res) => {
 app.listen(port, () => console.log(`Server started at port : ${port}`));
 
 app.get("/api/users", (req, res) => {
-    console.log("In get route method");
-    res.setHeader("myName" , 'Mohammad Zaid'); 
+    console.log(req.headers);
+
+    res.setHeader("myName" , 'Mohammad Zaid'); //custom header 
     res.setHeader("myAge" , '21'); 
-    //appears in the headers of response 
+    //Adding headers in the response when user access this route 
+    
     return res.json(users);
 });
 
