@@ -32,7 +32,8 @@ app.listen(port, () => console.log(`Server started at port : ${port}`));
 app.get("/api/users", (req, res) => {
     console.log(req.headers);
 
-    res.setHeader("myName" , 'Mohammad Zaid'); //custom header 
+    res.setHeader("X-myName" , 'Mohammad Zaid'); //!custom header 
+    //todo : follow this name scheme 
     res.setHeader("myAge" , '21'); 
     //Adding headers in the response when user access this route 
     
